@@ -1,0 +1,8 @@
+-q git+https://github.com/huggingface/peft.git
+transformers
+bitsandbytes
+accelerate
+numpy
+pandas
+timm
+#并且安装lavis库

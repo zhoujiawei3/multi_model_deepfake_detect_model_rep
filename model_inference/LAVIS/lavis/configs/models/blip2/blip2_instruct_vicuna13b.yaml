@@ -1,0 +1,121 @@
+ # Copyright (c) 2022, salesforce.com, inc.
+ # All rights reserved.
+ # SPDX-License-Identifier: BSD-3-Clause
+ # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+model:
+  arch: instruct_vicuna13b
+  load_finetuned:  True
+  load_pretrained: False
+
+  pretrained: "/data1/zhoujiawei/hg_hub/instruct_blip_vicuna13b_trimmed.pth"
+  finetuned: "/data1/zhoujiawei/hg_hub/models--MischaQI--SNIFFER/checkpoint_best.pth"
+ 
+  # vit encoder
+  image_size: 224
+  drop_path_rate: 0
+  use_grad_checkpoint: False
+  vit_precision: "fp16"
+  freeze_vit: True
+
+  # Q-Former
+  num_query_token: 32
+
+  # path to Vicuna checkpoint
+  llm_model: "/data/LLM_models/models--lmsys--vicuna-13b-v1.1"
+
+  # generation configs
+  prompt: ""
+  
+
+#datasets模板：
+# datasets': {'
+
+# newsclip_factvqa': {
+
+# 'dataset_card': 'dataset_card/newsclip_factvqa.md', 
+
+# 'data_type': 'images',
+
+#  'build_info': 
+
+# {
+
+# 'annotations': 
+
+# {'train': {'storage':'newsclip/annotations/instruction_train_fr_71072.json'},
+
+#  'val': {'storage': 'newsclip/annotations/instruction_val_fr_sampled_1756.json'},
+
+#  'test': {'storage': 'newsclip/annotations/instruction_test_fr_7264.json'}},
+
+#  'images': {'storage': 'newsclip/images/'}, 
+
+# 'vis_entity': {'storage': 'newsclip/evidences/visentity_balanced_lengthcut_85353_376.json', 'use_visentity': True}},
+
+# datasets:
+#   deepfake:
+#     # data_dir: ${env.data_dir}/datasets
+#     data_type: images # [images|videos|features]
+
+#     build_info:
+#       # Be careful not to append minus sign (-) before split to avoid itemizing
+#       annotations:
+#         train:
+#           storage: /data1/zhoujiawei/DiFF_mix_new/train/fake_dataset.json
+#         val:
+#           storage: /data1/zhoujiawei/DiFF_mix_new/val/fake_dataset.json
+#         test:
+#           storage: /data1/zhoujiawei/DiFF_mix_new/test/fake_dataset.json
+#       images:
+#         storage: /data1/zhoujiawei/DiFF_mix_new/
+#         train:
+#           storage: /data1/zhoujiawei/DiFF_mix_new/train/
+#         val:
+#           storage: /data1/zhoujiawei/DiFF_mix_new/val/
+#         test:
+#           storage: /data1/zhoujiawei/DiFF_mix_new/test/
+  # deepfakeblip2:
+  #   dataset_card: "dataset_card/deepfakeblip2.md"
+  #   data_type: "images"
+  #   build_info:
+  #     annotations:
+  #       train:
+  #         storage: "/data1/zhoujiawei/DiFF_mix_new/train/fake_dataset.json"
+  #       val:
+  #         storage: "/data1/zhoujiawei/DiFF_mix_new/val/fake_dataset.json"
+  #       test:
+  #         storage: "/data1/zhoujiawei/DiFF_mix_new/test/fake_dataset.json"
+  #     images:
+  #       storage: /data1/zhoujiawei/DiFF_mix_new/
+  #       train:
+  #         storage: /data1/zhoujiawei/DiFF_mix_new/
+  #       val:
+  #         storage: /data1/zhoujiawei/DiFF_mix_new/
+  #       test:
+  #         storage: /data1/zhoujiawei/DiFF_mix_new/
+      # images:
+      #   storage: "deepfakeblip2/images/"
+      # vis_entity:
+      #   storage: "deepfakeblip2/evidences/visentity_balanced_lengthcut_85353_376.json"
+      #   use_visentity: True
+preprocess:
+    vis_processor:
+        train:
+          name: "blip2_image_train"
+          image_size: 224
+        eval:
+          name: "blip_image_eval"
+          image_size: 224
+    # text_processor:
+    #     train:
+    #       name: "blip_caption_revised"
+    #       max_words: 256
+    #     eval:
+    #       name: "blip_caption_revised"
+    #       max_words: 256
+    text_processor:
+        train:
+          name: "blip_caption"
+        eval:
+          name: "blip_caption"

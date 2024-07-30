@@ -1,0 +1,101 @@
+datasets:
+  deepfake:
+    build_info:
+      annotations:
+        test:
+          storage: /data1/zhoujiawei/DiFF_mix_new/test/fake_dataset.json
+        train:
+          storage: /data1/zhoujiawei/DiFF_mix_new/train/fake_dataset.json
+        val:
+          storage: /data1/zhoujiawei/DiFF_mix_new/val/fake_dataset.json
+      images:
+        storage: /data1/zhoujiawei/DiFF_mix_new/
+        train:
+          storage: /data1/zhoujiawei/DiFF_mix_new/train/
+        val:
+          storage: /data1/zhoujiawei/DiFF_mix_new/val/
+        test:
+          storage: /data1/zhoujiawei/DiFF_mix_new/test/
+      # vis_entity:
+      #   storage: newsclip/evidences/visentity_balanced_lengthcut_85353_376.json
+      #   use_visentity: true
+    data_type: images
+    # dataset_card: dataset_card/newsclip_factvqa.md
+    text_processor:
+      eval:
+        max_words: 256
+        name: blip_caption_revised
+      train:
+        max_words: 256
+        name: blip_caption_revised
+    vis_processor:
+      eval:
+        image_size: 224
+        name: blip_image_eval
+      train:
+        image_size: 224
+        name: blip2_image_train
+model:
+  arch: blip2_vicuna_instruct
+  drop_path_rate: 0
+  finetuned: /data1/zhoujiawei/hg_hub/models--MischaQI--SNIFFER/checkpoint_best.pth
+  freeze_vit: true
+  image_size: 224
+  llm_model: /data/LLM_models/models--lmsys--vicuna-13b-v1.1
+  load_finetuned: true
+  load_pretrained: true
+  max_txt_len: 550
+  model_type: vicuna13b
+  num_query_token: 32
+  pretrained: /data1/zhoujiawei/hg_hub/instruct_blip_vicuna13b_trimmed.pth
+  prompt: ''
+  use_grad_checkpoint: true
+  use_lora: false
+  vit_precision: fp16
+preprocess:
+  text_processor:
+    eval:
+      name: blip_caption
+    train:
+      name: blip_caption
+  vis_processor:
+    eval:
+      image_size: 224
+      name: blip_image_eval
+    train:
+      image_size: 224
+      name: blip2_image_train
+run:
+  accum_grad_iters: 1
+  amp: true
+  batch_size_eval: 1
+  batch_size_train: 1
+  device: cuda
+  dist_backend: nccl
+  dist_url: env://
+  distributed: true
+  evaluate: false
+  gpu: 0
+  init_lr: 1.0e-05
+  lr_sched: linear_warmup_cosine_lr
+  max_epoch: 10
+  max_len: 256
+  min_len: 8
+  min_lr: 0
+  num_beams: 1
+  num_workers: 4
+  output_dir: /data3/zhoujiawei/finetune/instructblip/FactVQA_NewsClip_13B_withDeepFake
+  rank: 0
+  resume_ckpt_path: null
+  seed: 42
+  task: vqa
+  test_splits:
+  - test
+  train_splits:
+  - train
+  valid_splits:
+  - val
+  warmup_lr: 1.0e-08
+  warmup_steps: 1000
+  weight_decay: 0.05
+  world_size: 4

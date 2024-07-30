@@ -1,0 +1,23 @@
+# lavis/config/datasets/scienceqa/default.yaml
+datasets:
+  deepfake:
+    # data_dir: ${env.data_dir}/datasets
+    data_type: images # [images|videos|features]
+
+    build_info:
+      # Be careful not to append minus sign (-) before split to avoid itemizing
+      annotations:
+        train:
+          storage: /data1/zhoujiawei/DiFF_mix_new/train/fake_dataset.json
+        val:
+          storage: /data1/zhoujiawei/DiFF_mix_new/val/fake_dataset.json
+        test:
+          storage: /data1/zhoujiawei/DiFF_mix_new/test/fake_dataset.json
+      images:
+        storage: /data1/zhoujiawei/DiFF_mix_new/
+        train:
+          storage: /data1/zhoujiawei/DiFF_mix_new/train/
+        val:
+          storage: /data1/zhoujiawei/DiFF_mix_new/val/
+        test:
+          storage: /data1/zhoujiawei/DiFF_mix_new/test/
